@@ -14,7 +14,16 @@ export class DishService {
   }
 
   getDish(id: string): Dish {
-    return DISHES[id];
+    for(let i = 0;i<DISHES.length;i++) {
+      if(DISHES[i].id === id) {
+        // console.log('Found: ', DISHES[i])
+        return DISHES[i];
+      }
+    }
+    // return DISHES.filter((dish) => {
+    //   dish.id === id;
+    // })[0];
+    // return DISHES[id];
   }
 
   getFeaturedDish(): Dish {

@@ -22,12 +22,18 @@ export class HomeComponent implements OnInit {
               private leaderService: LeaderService) { }
 
   ngOnInit() {
+    // this.dishService.getFeaturedDish()
+    //             .then((dish) => this.dish =dish);
     this.dishService.getFeaturedDish()
-                .then((dish) => this.dish =dish);
+                .subscribe((dish) => this.dish =dish);
+    // this.promotionService.getFeaturedPromotion()
+    //     .then((promotion) => this.promotion = promotion);
     this.promotionService.getFeaturedPromotion()
-        .then((promotion) => this.promotion = promotion);
+        .subscribe((promotion) => this.promotion = promotion);
+    // this.leaderService.getFeaturedLeader()
+    //                       .then((featuredLeader) => this.featuredLeader = featuredLeader);
     this.leaderService.getFeaturedLeader()
-                          .then((featuredLeader) => this.featuredLeader = featuredLeader);
+                          .subscribe((featuredLeader) => this.featuredLeader = featuredLeader);
   }
 
 }

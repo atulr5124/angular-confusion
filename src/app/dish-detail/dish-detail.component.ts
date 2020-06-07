@@ -18,8 +18,10 @@ export class DishDetailComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
+    // this.dishService.getDish(id)
+    //   .then((dish) => this.dish = dish);
     this.dishService.getDish(id)
-      .then((dish) => this.dish = dish);
+      .subscribe((dish) => this.dish = dish);
     // console.log(this.dish);
   }
 

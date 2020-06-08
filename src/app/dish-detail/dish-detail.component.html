@@ -50,6 +50,30 @@
         </p>
       </mat-list-item>
     </mat-list>
+
+    <form novalidate [formGroup]="commentForm" #cform="ngForm" (ngSubmit)="onSubmit()">
+      <p>
+        <mat-form-field class="half-width">
+          <input matInput formControlName="author" placeholder="Name" type="text" required>
+          <mat-error *ngIf="formErrors.author">{{formErrors.author}}</mat-error>
+        </mat-form-field>
+      </p>
+      <table class="full-width">
+        <td>
+          <mat-slider formControlName="rating" thumbLabel tickInterval="1" min="1" max="5">
+          </mat-slider>
+        </td>
+      </table>
+        <p>
+          <mat-form-field class="full-width">
+            <textarea matInput formControlName="comment" placeholder="Your Comment" rows=12 required></textarea>
+          </mat-form-field>
+        </p>
+        
+      <button type="submit" mat-button class="background-primary text-floral-white"
+      [disabled]="commentForm.invalid">Submit</button>
+    </form>
+
   </div>
 
 </div>

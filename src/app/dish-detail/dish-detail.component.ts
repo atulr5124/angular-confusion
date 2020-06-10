@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { Location } from '@angular/common';
 import { Params, ActivatedRoute } from '@angular/router';
@@ -17,9 +17,11 @@ export class DishDetailComponent implements OnInit {
 
   // @Input()
   dish: Dish;
+  errMsg: string;
   dishIds: string[];
   prev: string;
   next: string;
+  dishCopy: Dish;
 
   commentForm: FormGroup;
   comment: DishComment;
@@ -42,14 +44,16 @@ export class DishDetailComponent implements OnInit {
   };
     
   constructor(private dishService: DishService, private route: ActivatedRoute, private location: Location,
-              private fb: FormBuilder) { 
+              private fb: FormBuilder,
+              @Inject('BASE_URL') private BASE_URL) { 
                 this.createForm();
               }
 
   ngOnInit() {
     this.dishService.getDishIds().subscribe((dishIds) => this.dishIds = dishIds);
     this.route.params.pipe(switchMap((params: Params) => this.dishService.getDish(params['id'])))
-        .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id) });
+        .subscribe(dish => { this.dish = dish; this.dishCopy = dish; this.setPrevNext(dish.id) },
+        errMsg => this.errMsg = errMsg);
     // this.dishService.getDish(id)
     //   .then((dish) => this.dish = dish);
     // this.dishService.getDish(id)
@@ -92,7 +96,13 @@ export class DishDetailComponent implements OnInit {
     this.comment = this.commentForm.value;
     const date = new Date();
     this.comment.date = date.toISOString();
-    this.dish.comments.push(this.comment);
+    this.dishCopy.comments.push(this.comment);
+    this.dishService.putDish(this.dishCopy)
+        .subscribe(dish => {
+          this.dish = dish;
+          this.dishCopy = dish;
+        },
+        errMsg => {this.dish = null; this.dishCopy = null; this.errMsg = <any>errMsg});
     console.log(this.comment);
     this.commentForm.reset({
       author: '',

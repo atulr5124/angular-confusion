@@ -1,12 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
-
+import { flyInOut } from '../animations/app.animation';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+  styleUrls: ['./contact.component.scss'],
+  host: {
+    '[@flyInOut]': 'true',
+    'style': 'display: block;'
+  },
+  animations: [
+    flyInOut()
+  ]
 })
 export class ContactComponent implements OnInit {
 
@@ -43,7 +50,7 @@ export class ContactComponent implements OnInit {
     }
   };
 
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder) {
     this.createForm();
   }
 
@@ -60,28 +67,28 @@ export class ContactComponent implements OnInit {
       contactType: 'None',
       message: ''
     });
-    
+
     this.feedbackForm.valueChanges
-          .subscribe(data => this.onValueChanged(data));
+      .subscribe(data => this.onValueChanged(data));
 
     // Used to reset form validaiton messages.
     this.onValueChanged();
   }
 
   onValueChanged(data?: any) {
-    if(!this.feedbackForm) {
+    if (!this.feedbackForm) {
       return;
     }
     const form = this.feedbackForm;
-    for(const field in this.formErrors) {
-      if(this.formErrors.hasOwnProperty(field)) {
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
         //clear previous error messages, if any
         this.formErrors[field] = '';
         const control = form.get(field);
-        if(control && control.dirty && !control.valid) {
+        if (control && control.dirty && !control.valid) {
           const messages = this.validationMessages[field];
-          for(const key in control.errors) {
-            if(control.errors.hasOwnProperty(key)) {
+          for (const key in control.errors) {
+            if (control.errors.hasOwnProperty(key)) {
               this.formErrors[field] += messages[key] + ' ';
             }
           }
